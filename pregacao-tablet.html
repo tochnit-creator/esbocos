@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#071A22">
+<title>Chega de Molhar Só o Pé — Ezequiel 47</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --abismo:#071A22;
+    --fundo:#0C2733;
+    --card:#103240;
+    --linha:#1B4757;
+    --agua:#3FB6C6;
+    --agua-clara:#8CE6F0;
+    --gloria:#E8B44C;
+    --gloria-clara:#FFD98A;
+    --creme:#EDF3F2;
+    --nevoa:#7FA0AB;
+    --alerta:#D9705B;
+    --roxo:#A98BC7;
+
+    --fala:1.42rem;
+    --bg:var(--abismo);
+    --fg:var(--creme);
+    --rail:64px;
+  }
+  html[data-tema="claro"]{
+    --abismo:#F4F6F5;
+    --fundo:#FFFFFF;
+    --card:#EDF2F3;
+    --linha:#CBD9DE;
+    --agua:#12707F;
+    --agua-clara:#0B4E59;
+    --gloria:#8A5E00;
+    --gloria-clara:#6B4900;
+    --creme:#11242C;
+    --nevoa:#5C7079;
+    --alerta:#A6331E;
+    --roxo:#5B3E7A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--fg);
+    font-family:"Archivo",system-ui,sans-serif;
+    line-height:1.5;-webkit-font-smoothing:antialiased;
+    padding-left:var(--rail);
+    overscroll-behavior-y:contain;
+  }
+  @media(max-width:560px){ :root{--rail:40px} }
+
+  /* ---------- RÉGUA DE ÁGUA (assinatura) ---------- */
+  .regua{
+    position:fixed;left:0;top:0;bottom:0;width:var(--rail);z-index:40;
+    background:linear-gradient(180deg,rgba(12,39,51,.9),rgba(7,26,34,.95));
+    border-right:1px solid var(--linha);
+    overflow:hidden;
+  }
+  html[data-tema="claro"] .regua{background:linear-gradient(180deg,#E7EEF0,#DCE6E9)}
+  .agua-nivel{
+    position:absolute;left:0;right:0;bottom:0;height:0%;
+    background:linear-gradient(180deg,rgba(63,182,198,.55),rgba(63,182,198,.18));
+    transition:height .25s linear;
+  }
+  .agua-topo{
+    position:absolute;left:0;right:0;bottom:0;height:3px;
+    background:var(--agua-clara);
+    box-shadow:0 0 14px rgba(140,230,240,.9);
+    transition:bottom .25s linear;
+  }
+  .marca{
+    position:absolute;left:0;right:0;height:1px;background:var(--linha);
+    display:flex;align-items:center;
+  }
+  .marca span{
+    position:absolute;left:5px;bottom:3px;
+    font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--nevoa);white-space:nowrap;
+  }
+  @media(max-width:560px){ .marca span{display:none} }
+
+  /* ---------- BARRA SUPERIOR ---------- */
+  header{
+    position:sticky;top:0;z-index:30;
+    background:color-mix(in srgb, var(--abismo) 92%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--linha);
+    padding:8px 14px;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  }
+  .titulo{
+    font-family:"Fraunces",Georgia,serif;font-weight:600;
+    font-size:1rem;letter-spacing:-.01em;margin-right:auto;line-height:1.1;
+  }
+  .titulo b{color:var(--agua-clara);font-weight:600}
+  .btn{
+    font-family:"Archivo",sans-serif;font-weight:600;font-size:.75rem;
+    letter-spacing:.04em;
+    background:var(--card);color:var(--fg);
+    border:1px solid var(--linha);border-radius:999px;
+    padding:8px 12px;cursor:pointer;min-height:38px;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .btn:active{transform:scale(.96)}
+  .btn.on{background:var(--agua);color:#04141a;border-color:var(--agua)}
+  html[data-tema="claro"] .btn.on{color:#fff}
+  .btn:focus-visible{outline:2px solid var(--agua-clara);outline-offset:2px}
+  .relogio{
+    font-variant-numeric:tabular-nums;font-weight:700;font-size:1.05rem;
+    padding:6px 12px;border-radius:999px;border:1px solid var(--linha);
+    background:var(--card);cursor:pointer;min-height:38px;display:flex;align-items:center;
+  }
+  .relogio.rodando{border-color:var(--agua);color:var(--agua-clara)}
+  .janela{
+    font-size:.68rem;font-weight:700;letter-spacing:.06em;
+    color:var(--nevoa);padding:5px 9px;border-radius:999px;border:1px dashed var(--linha);
+  }
+  .janela.estourou{color:var(--gloria);border-color:var(--gloria);border-style:solid}
+
+  /* ---------- CONTEÚDO ---------- */
+  main{max-width:760px;margin:0 auto;padding:18px 18px 40vh}
+
+  .bloco{scroll-margin-top:70px;padding:10px 0 26px;border-bottom:1px solid var(--linha)}
+  .bloco:last-of-type{border-bottom:0}
+  .cab{
+    display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+    padding:12px 0 4px;cursor:pointer;position:sticky;top:56px;z-index:20;
+    background:linear-gradient(180deg,var(--abismo) 78%,transparent);
+  }
+  .cab h2{
+    font-family:"Fraunces",Georgia,serif;font-weight:600;
+    font-size:1.28rem;line-height:1.15;letter-spacing:-.01em;color:var(--agua-clara);
+    margin-right:auto;
+  }
+  .cab .tempo{font-size:.7rem;font-weight:700;color:var(--nevoa);letter-spacing:.08em;white-space:nowrap}
+  .cab .seta{color:var(--nevoa);font-size:.8rem;transition:transform .2s}
+  .bloco.fechado .seta{transform:rotate(-90deg)}
+  .bloco.fechado .corpo{display:none}
+
+  .fala{
+    font-size:var(--fala);font-weight:600;line-height:1.34;
+    margin:0 0 .55em;letter-spacing:-.005em;
+  }
+  .fala em{font-style:normal;color:var(--agua-clara)}
+  .fala strong{font-weight:800}
+
+  .dir{
+    font-size:.82rem;font-style:italic;color:var(--roxo);
+    margin:.2em 0 .7em;font-weight:500;
+  }
+  .dir::before{content:"( ";}
+  .dir::after{content:" )";}
+
+  .refrao{
+    font-family:"Fraunces",Georgia,serif;font-style:italic;font-weight:600;
+    font-size:1.55rem;line-height:1.25;color:var(--gloria-clara);
+    margin:.6em 0 .8em;padding-left:14px;border-left:3px solid var(--gloria);
+  }
+
+  .escritura{
+    font-family:"Fraunces",Georgia,serif;font-style:italic;
+    font-size:1.05rem;color:var(--nevoa);
+    margin:.4em 0 .9em;padding-left:14px;border-left:2px solid var(--linha);
+  }
+
+  .cue{
+    background:color-mix(in srgb, var(--roxo) 16%, transparent);
+    border:1px solid color-mix(in srgb, var(--roxo) 40%, transparent);
+    border-radius:12px;padding:11px 13px;margin:.5em 0 .9em;
+    font-size:1.02rem;font-weight:600;
+  }
+  .cue b{color:var(--roxo);font-size:.68rem;letter-spacing:.12em;display:block;margin-bottom:3px}
+
+  .app{
+    background:color-mix(in srgb, var(--gloria) 15%, transparent);
+    border:1px solid color-mix(in srgb, var(--gloria) 45%, transparent);
+    border-left:5px solid var(--gloria);
+    border-radius:12px;padding:12px 14px;margin:.6em 0 1em;
+    font-size:1.06rem;line-height:1.4;
+  }
+  .app b{color:var(--gloria);font-size:.66rem;letter-spacing:.14em;display:block;margin-bottom:4px;font-weight:800}
+  .app strong{color:var(--gloria-clara);font-weight:800}
+  html[data-tema="claro"] .app strong{color:var(--gloria)}
+
+  /* estudo: contexto/notas — escondido por padrão */
+  details.ctx{margin:.5em 0 .9em}
+  details.ctx>summary{
+    list-style:none;cursor:pointer;
+    font-size:.72rem;font-weight:700;letter-spacing:.1em;
+    color:var(--agua);border:1px dashed var(--linha);
+    border-radius:999px;padding:7px 12px;display:inline-flex;gap:7px;align-items:center;
+    min-height:34px;
+  }
+  details.ctx>summary::-webkit-details-marker{display:none}
+  details.ctx[open]>summary{color:var(--nevoa);margin-bottom:8px}
+  details.ctx .txt{
+    background:var(--card);border-radius:12px;padding:12px 14px;
+    font-size:.94rem;line-height:1.5;color:var(--fg);
+    border-left:4px solid var(--agua);
+  }
+  details.ctx.cultural .txt{border-left-color:var(--roxo)}
+  details.ctx.cultural>summary{color:var(--roxo)}
+  details.ctx.aviso .txt{border-left-color:var(--alerta)}
+  details.ctx.aviso>summary{color:var(--alerta)}
+  details.ctx .txt b{color:var(--agua-clara);font-weight:700}
+  html[data-tema="claro"] details.ctx .txt b{color:var(--agua-clara)}
+
+  /* palavra difícil */
+  .glo{
+    font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;
+    border-bottom:2px dotted var(--agua);
+  }
+  .glo::after{content:"";}
+
+  /* seções de estudo no fim */
+  .estudo{margin-top:36px}
+  .estudo>summary{
+    list-style:none;cursor:pointer;
+    font-family:"Fraunces",serif;font-size:1.15rem;font-weight:600;
+    color:var(--agua-clara);
+    border:1px solid var(--linha);border-radius:14px;
+    padding:14px 16px;display:flex;justify-content:space-between;align-items:center;
+    background:var(--card);
+  }
+  .estudo>summary::-webkit-details-marker{display:none}
+  .estudo .conteudo{padding:14px 2px}
+  .apro{margin:0 0 18px}
+  .apro h3{
+    font-family:"Archivo",sans-serif;font-size:.98rem;font-weight:800;
+    color:var(--agua-clara);margin-bottom:5px;
+  }
+  .apro p{font-size:.94rem;line-height:1.5;margin-bottom:7px;color:var(--fg)}
+  .apro p b{color:var(--agua-clara)}
+  .apro .para{
+    background:color-mix(in srgb, var(--gloria) 12%, transparent);
+    border-left:4px solid var(--gloria);border-radius:9px;
+    padding:9px 11px;font-size:.92rem;
+  }
+  .apro .para b{color:var(--gloria)}
+  .qa{margin-bottom:16px}
+  .qa .p{
+    font-weight:800;font-size:1rem;color:var(--agua-clara);
+    background:var(--card);border-left:4px solid var(--agua);
+    border-radius:8px;padding:9px 11px;margin-bottom:6px;
+  }
+  .qa .r{font-size:.94rem;line-height:1.5}
+  .qa .r b{color:var(--gloria-clara);font-weight:700}
+  html[data-tema="claro"] .qa .r b{color:var(--gloria)}
+  .qa .ref{font-size:.75rem;color:var(--nevoa);font-style:italic;margin-top:4px}
+
+  /* ---------- GAVETA DE BLOCOS ---------- */
+  .gaveta{
+    position:fixed;inset:0;z-index:60;background:rgba(4,14,18,.7);
+    backdrop-filter:blur(4px);
+    display:none;
+  }
+  .gaveta.aberta{display:block}
+  .gaveta .painel{
+    position:absolute;left:0;top:0;bottom:0;width:min(320px,84vw);
+    background:var(--fundo);border-right:1px solid var(--linha);
+    padding:16px;overflow-y:auto;
+  }
+  .gaveta h4{font-family:"Fraunces",serif;font-size:1rem;margin-bottom:10px;color:var(--nevoa)}
+  .gaveta a{
+    display:flex;justify-content:space-between;gap:10px;
+    padding:13px 12px;border-radius:10px;color:var(--fg);text-decoration:none;
+    font-weight:600;font-size:.95rem;border:1px solid transparent;
+  }
+  .gaveta a:hover,.gaveta a:focus-visible{background:var(--card);border-color:var(--linha)}
+  .gaveta a i{font-style:normal;color:var(--nevoa);font-size:.72rem;font-weight:700}
+
+  /* ---------- BARRA DE DEFINIÇÃO ---------- */
+  .defbar{
+    position:fixed;left:var(--rail);right:0;bottom:0;z-index:70;
+    background:var(--card);border-top:2px solid var(--agua);
+    padding:14px 16px calc(14px + env(safe-area-inset-bottom));
+    transform:translateY(110%);transition:transform .22s ease;
+    box-shadow:0 -10px 30px rgba(0,0,0,.35);
+  }
+  .defbar.aberta{transform:translateY(0)}
+  .defbar .termo{font-weight:800;color:var(--agua-clara);font-size:1rem;margin-bottom:3px}
+  .defbar .def{font-size:.95rem;line-height:1.45;padding-right:40px}
+  .defbar .fechar{
+    position:absolute;right:10px;top:10px;background:none;border:0;color:var(--nevoa);
+    font-size:1.4rem;cursor:pointer;padding:6px 10px;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;scroll-behavior:auto!important}
+  }
+</style>
+</head>
+<body>
+
+<!-- RÉGUA DE ÁGUA -->
+<div class="regua" aria-hidden="true">
+  <div class="agua-nivel" id="nivel"></div>
+  <div class="agua-topo" id="topo"></div>
+  <div id="marcas"></div>
+</div>
+
+<header>
+  <button class="btn" id="btnGaveta" aria-label="Abrir lista de blocos">☰ Blocos</button>
+  <div class="titulo">Chega de molhar só o pé<br><b>Ezequiel 47</b></div>
+  <span class="janela" id="janela">0–6 min</span>
+  <button class="relogio" id="relogio" title="Toque para iniciar/pausar. Toque longo para zerar.">00:00</button>
+  <button class="btn" id="btnCtx" aria-pressed="false">Contexto</button>
+  <button class="btn" id="btnMenos" aria-label="Diminuir letra">A−</button>
+  <button class="btn" id="btnMais" aria-label="Aumentar letra">A+</button>
+  <button class="btn" id="btnTela" aria-pressed="false" title="Impede a tela de apagar">Tela</button>
+  <button class="btn" id="btnTema" aria-label="Alternar tema">◐</button>
+</header>
+
+<main id="main">
+
+  <!-- ABERTURA -->
+  <section class="bloco" id="b1" data-ini="0" data-fim="6">
+    <div class="cab"><h2>Abertura — o homem que só olhava a água</h2><span class="tempo">0–6 min</span><span class="seta">▾</span></div>
+    <div class="corpo">
+      <p class="dir">começa baixo, contando uma história</p>
+      <p class="fala">Eu quero te apresentar um homem.</p>
+      <p class="fala">Cinquenta anos de idade.</p>
+      <p class="fala">Vinte anos atrás o céu se abriu sobre a cabeça dele.</p>
+      <p class="fala">Ele viu a glória de Deus. Viu o trono. Viu as rodas. Viu o fogo.</p>
+      <p class="dir">pausa</p>
+      <p class="fala">Mas esse homem é <em>viúvo</em>.</p>
+      <p class="fala">Enterrou a esposa… e Deus não deixou ele nem chorar.</p>
+      <p class="fala">Por anos chamaram ele de louco. Disseram que a palavra dele não ia se cumprir.</p>
+      <p class="fala">Ele ficou mudo. Sozinho. Isolado.</p>
+      <p class="dir">sobe um pouco</p>
+      <p class="fala">E agora, cansado, velho, de novo ele tá diante de uma visão… à beira da água.</p>
+      <p class="fala">O nome dele é <strong>Ezequiel</strong>.</p>
+      <p class="refrao">E por vinte anos ele viu a água… mas nunca entrou na água.</p>
+      <div class="cue"><b>INTERAÇÃO</b>“Vira pro teu irmão e diz: ‘hoje o rio vai subir!’”</div>
+    </div>
+  </section>
+
+  <!-- I -->
+  <section class="bloco" id="b2" data-ini="6" data-fim="12">
+    <div class="cab"><h2>I. O chamado — na beira do rio (cap. 1)</h2><span class="tempo">6–12 min</span><span class="seta">▾</span></div>
+    <div class="corpo">
+      <p class="fala">593 antes de Cristo. Ezequiel tem uns 30 anos.</p>
+      <p class="fala">Trinta é a idade em que o <button class="glo" data-t="Sacerdote" data-d="O que servia a Deus no templo, oferecendo sacrifícios pelo povo. Era a função de Ezequiel.">sacerdote</button> <strong>COMEÇAVA</strong> a servir no templo.</p>
+      <p class="dir">com peso</p>
+      <p class="fala">Mas ele não tá no templo. Tá <button class="glo" data-t="Cativo / exílio" data-d="Levado à força pra viver longe da sua terra, como prisioneiro de guerra. Ezequiel foi levado pra Babilônia em 597 a.C.">cativo</button>. Na Babilônia. Num canal estrangeiro.</p>
+      <p class="fala">Um sacerdote… <em>sem templo</em>.</p>
+      <p class="escritura">“Junto ao rio Quebar… os céus se abriram, e eu vi visões de Deus.” (1.1)</p>
+      <p class="fala">Ele viu a glória e caiu de cara no chão. Mas viu o Deus do rio… <strong>DA MARGEM</strong>.</p>
+      <p class="fala">Encontrar Deus na margem não é a mesma coisa que entrar no rio.</p>
+      <div class="app"><b>▶ APLICAÇÃO-CHAVE</b><strong>Teu “lugar seco”, teu chamado interrompido, pode ser o BERÇO de um chamado maior.</strong> O sacerdote que não podia servir no altar é o mesmo que, no fim, Deus leva pra DENTRO do rio que brota do altar.</div>
+      <details class="ctx"><summary>▸ Contexto bíblico</summary><div class="txt">Ezequiel era um <b>sacerdote judeu</b> levado prisioneiro para a Babilônia em <b>597 a.C.</b>, junto com o rei Joaquim, quando os babilônios dominaram Judá. Vivia num campo de exilados às margens do <b>canal Quebar</b>. Foi ali que Deus se revelou numa visão impressionante — seres viventes, rodas cheias de olhos e um trono de fogo (a “glória do SENHOR”). No cap. 1, Ezequiel ainda é só espectador na margem.</div></details>
+    </div>
+  </section>
+
+  <!-- II -->
+  <section class="bloco" id="b3" data-ini="12" data-fim="20">
+    <div class="cab"><h2>II. A longa estrada — o preço dos anos (caps. 2–33)</h2><span class="tempo">12–20 min</span><span class="seta">▾</span></div>
+    <div class="corpo">
+      <p class="dir">mais lento, mais pesado</p>
+      <p class="fala">Depois do chamado não veio glamour. Veio deserto.</p>
+      <p class="fala">Deus mandou ele pregar pra um povo que <strong>NÃO</strong> ia ouvir.</p>
+      <p class="fala">Ele virou espetáculo: deitou de lado meses, raspou a barba, encenou o <button class="glo" data-t="Cerco" data-d="Quando um exército cerca a cidade por fora, fecha os portões e corta a comida e a água, esperando o povo se render ou morrer de fome. Foi o que a Babilônia fez com Jerusalém.">cerco</button>.</p>
+      <p class="fala">Deus prendeu a língua dele. Anos calado.</p>
+      <p class="fala">E o povo rindo: ‘essa visão é pra daqui a muito tempo, nunca vai acontecer’.</p>
+      <p class="dir">pausa longa — baixa o tom</p>
+      <p class="fala">Aí veio o golpe mais fundo.</p>
+      <p class="escritura">“Filho do homem, eis que tirarei de ti o desejo dos teus olhos…” (24.16)</p>
+      <p class="fala">A esposa dele. Morreu na noite do dia em que começou o cerco.</p>
+      <p class="fala">E Deus disse: <em>não chora. Não faz luto.</em></p>
+      <p class="fala">Até a dor dele virou sinal pro povo. E ele carregou essa viuvez sozinho por dezesseis anos.</p>
+      <p class="dir">silêncio</p>
+      <details class="ctx cultural"><summary>▸ Contexto cultural — o luto proibido</summary><div class="txt">No Israel antigo, o luto tinha <b>ritos públicos e sagrados</b>: chorar e prantear alto, rasgar as vestes, vestir pano de saco, pôr cinzas na cabeça, tirar as sandálias, cobrir o lábio/bigode, jejuar, sentar-se no chão e receber o “pão dos que choram” (comida trazida pelos vizinhos pra consolar). Guardar luto não era só sentimento — era um <b>direito e um dever</b>. Em <b>Ez 24.16-24</b>, Deus manda Ezequiel NÃO fazer nada disso: “geme em silêncio, põe o turbante, calça as sandálias, não cubras o lábio, não comas o pão dos homens”. Ou seja, Deus tira dele o próprio <b>direito de chorar em público</b>. A dor fica sem válvula, sem ritual, sem consolo — e isso vira o sinal: como Ezequiel enterra a esposa de olhos secos, o povo, quando Jerusalém cair, ficará atônito demais pra chorar do jeito costumeiro. <b>O luto negado prega o tamanho da tragédia que vem.</b></div></details>
+      <details class="ctx"><summary>▸ De onde viria a dor?</summary><div class="txt">No mesmo capítulo, Deus explica o sinal (24.21): assim como Ezequiel perdeu “o desejo dos seus olhos” (a esposa), Israel perderia o <b>“desejo dos seus olhos”</b> — o <b>TEMPLO</b> (“o orgulho do vosso poder… a delícia da vossa alma”) e os <b>filhos e filhas deixados em Jerusalém</b>, que cairiam à espada. A dor viria de <b>Babilônia</b>, pelas mãos de <b>Nabucodonosor</b>, que destruiria a cidade e o templo em <b>586 a.C.</b> Detalhe: a esposa morre quando o cerco COMEÇA (24.1); o templo cai quando o cerco TERMINA. Os exilados achavam Jerusalém intocável — Deus avisa que até o que eles mais amavam ia cair.</div></details>
+      <div class="cue"><b>INTERAÇÃO</b>“Se tem alguém aqui servindo a Deus chorando por dentro… levanta a mão.”</div>
+      <p class="dir">começa a virar a chave</p>
+      <p class="refrao">Mas Deus ainda NÃO tinha terminado com o Ezequiel.</p>
+      <p class="fala">A maior visão da vida dele… ainda nem tinha acontecido!</p>
+      <div class="app"><b>▶ APLICAÇÃO-CHAVE</b><strong>Serviu décadas sem aplauso, carregando uma perda em silêncio?</strong> A maior visão veio DEPOIS de tudo isso. Às vezes Deus não tira a dor — Ele dá sentido a ela.</div>
+    </div>
+  </section>
+
+  <!-- III -->
+  <section class="bloco" id="b4" data-ini="20" data-fim="24">
+    <div class="cab"><h2>III. A virada — “e me fez PASSAR pelas águas” (caps. 40–47)</h2><span class="tempo">20–24 min</span><span class="seta">▾</span></div>
+    <div class="corpo">
+      <p class="fala">572 antes de Cristo. Ezequiel agora tem uns 50 anos.</p>
+      <p class="fala">Cinquenta é a idade em que o sacerdote <strong>PARAVA</strong> de servir.</p>
+      <p class="fala">No fim da linha… Deus dá a <strong>MAIOR</strong> visão de todas: um novo templo.</p>
+      <p class="fala">Um homem com uma vara começa a medir tudo. E Ezequiel só olhando. O <button class="glo" data-t="Topógrafo" data-d="Quem mede e mapeia terrenos. Uso ilustrativo — Ezequiel só media e observava, nunca entrava.">topógrafo</button>.</p>
+      <p class="fala">Aí a glória que ele viu ir embora… <strong>VOLTA!</strong> Enche a casa!</p>
+      <p class="fala">E começa a descer um rio debaixo do altar.</p>
+      <p class="escritura">“E me fez passar pelas águas…” (47.3)</p>
+      <p class="fala">Pela <strong>PRIMEIRA</strong> vez em vinte anos, o guia não deixou ele na margem.</p>
+      <p class="fala">E olha a reviração: a mesma vara que só media… agora mede <em>ELE</em> pra dentro do rio.</p>
+      <div class="app"><b>▶ APLICAÇÃO-CHAVE</b><strong>A Presença pode deixar o que tolera o pecado, mas a graça a TRAZ de volta</strong> — e o rio só flui depois. Deus te mede pra DENTRO: chega de só inspecionar o rio, entra nele.</div>
+      <details class="ctx"><summary>▸ Contexto bíblico</summary><div class="txt">Já idoso (~25 anos de exílio), Ezequiel recebe a maior visão: um <b>novo templo</b>. No <b>cap. 43</b>, a glória que tinha <b>ABANDONADO</b> o templo (por causa do pecado, caps. 8–11) <b>VOLTA</b> e enche a casa. E no cap. 47 brota do santuário um rio que se aprofunda e cura tudo por onde passa. Primeiro a <b>Presença volta</b>, depois o <b>rio flui</b>.</div></details>
+    </div>
+  </section>
+
+  <!-- ESCADA -->
+  <section class="bloco" id="b5" data-ini="24" data-fim="33">
+    <div class="cab"><h2>A escada do rio — o que cada membro te ensina</h2><span class="tempo">24–33 min</span><span class="seta">▾</span></div>
+    <div class="corpo">
+      <p class="dir">o coração da mensagem — sobe um degrau de cada vez, com o refrão entre eles</p>
+
+      <p class="refrao" style="color:var(--agua-clara);border-left-color:var(--agua)">1. Os pés — orientação e decisão</p>
+      <p class="fala">Repara qual parte do corpo entra primeiro. O <strong>PÉ</strong>.</p>
+      <p class="fala">E o pé é <strong>DIREÇÃO</strong>. É ele que decide pra onde o corpo vai. É ele que dá o primeiro passo.</p>
+      <p class="fala">‘Lâmpada pros meus pés é a tua Palavra.’</p>
+      <p class="fala">Ninguém é levado pelo rio por acidente. Você <strong>ENTRA</strong>.</p>
+      <p class="fala">O extraordinário começa com uma decisão: vira as costas pra margem e <strong>PISA</strong> pra dentro.</p>
+      <p class="fala">Você não cai no rio. Você <em>ESCOLHE</em> o rio. O primeiro milagre é o passo.</p>
+      <p class="refrao">A água tava subindo.</p>
+
+      <p class="refrao" style="color:var(--agua-clara);border-left-color:var(--agua)">2. Os tornozelos — equilíbrio (o último resquício de controle)</p>
+      <p class="fala">A água sobe. Bate no tornozelo.</p>
+      <p class="fala">O tornozelo é o <strong>EQUILÍBRIO</strong>. É ele que te deixa virar, ajustar… e voltar.</p>
+      <p class="fala">É o nível do ‘experimentar sem se comprometer’.</p>
+      <p class="fala">Molhado o suficiente pra dizer que tá no rio. Raso o suficiente pra manter o <em>SEU</em> equilíbrio.</p>
+      <p class="fala">Muita gente mora aqui a vida inteira.</p>
+      <p class="fala">Deus não quer tirar teu equilíbrio pra te machucar — quer te levar pra onde o equilíbrio é <strong>ELE</strong>.</p>
+      <p class="refrao">A água tava subindo.</p>
+
+      <p class="refrao" style="color:var(--agua-clara);border-left-color:var(--agua)">3. Os joelhos — oração e <button class="glo" data-t="Quebrantamento" data-d="Coração rendido, humilhado diante de Deus; deixar de ser duro e se entregar." style="border-bottom-color:var(--agua-clara)">quebrantamento</button></p>
+      <p class="fala">A água sobe. Bate no joelho.</p>
+      <p class="fala">E o joelho já começa a te <strong>EMPURRAR</strong>. Fica difícil ficar em pé sozinho.</p>
+      <p class="fala">Não é à toa que é o joelho. Joelho é adoração. Joelho é oração. Joelho é entrega.</p>
+      <p class="fala">‘Todo joelho se dobrará.’</p>
+      <p class="fala">Pra descer mais fundo em Deus, alguém tem que <strong>DOBRAR</strong>.</p>
+      <p class="fala">O joelho é o primeiro membro que se rende — e isso não é fraqueza, é o segredo da profundidade.</p>
+      <p class="refrao">Você só desce mais no rio quando desce o joelho.</p>
+
+      <p class="refrao" style="color:var(--agua-clara);border-left-color:var(--agua)">4. A cintura — força, identidade e geração</p>
+      <p class="fala">A água sobe. Bate na cintura.</p>
+      <p class="fala">Os <button class="glo" data-t="Lombos" data-d="A região da cintura/quadril; na Bíblia, símbolo de força e de onde vem a descendência.">lombos</button> são a <strong>FORÇA</strong>. É onde o guerreiro prende o cinto e a espada.</p>
+      <p class="fala">E é dos lombos que sai a <strong>GERAÇÃO</strong> — a descendência.</p>
+      <p class="fala">É o teu centro. É a tua força. É o que nasce de você.</p>
+      <p class="fala">Quando o rio chega aqui, tua força deixa de ser tua.</p>
+      <p class="fala">Não é mais tua perna que te segura. É a <button class="glo" data-t="Correnteza" data-d="A força da água que corre e arrasta; o que te 'carrega' quando você solta o chão.">CORRENTEZA</button>.</p>
+      <p class="fala">E teu fruto, teu legado, tua descendência espiritual passam a nascer <strong>DO RIO</strong> — não da tua força.</p>
+      <p class="refrao">A água tava subindo!</p>
+
+      <p class="refrao" style="color:var(--agua-clara);border-left-color:var(--agua)">5. Acima da cabeça — águas de nadar</p>
+      <p class="dir">aqui explode</p>
+      <p class="fala">A água sobe… passa da cintura… e <strong>COBRE A CABEÇA</strong>.</p>
+      <p class="fala">A cabeça. A mente. A razão. O ‘eu preciso entender antes de obedecer’.</p>
+      <p class="fala">E o pé… <strong>NÃO</strong> acha mais o chão. Você não anda mais. Você <em>NADA</em>.</p>
+      <p class="fala">Cobrir a cabeça não é perder o juízo. É parar de exigir entender tudo pra depois seguir.</p>
+      <p class="fala">Tornozelo você controla. Joelho você negocia. Cintura ainda resiste.</p>
+      <p class="fala">Mas na água de nadar só sobrevive quem <strong>SOLTA</strong>.</p>
+      <p class="fala">Aqui você não dirige mais o rio. <strong>O RIO</strong> te dirige.</p>
+      <p class="fala">E é exatamente aqui — onde ninguém tem mais o chão — que começa a vida que o <button class="glo" data-t="Mar Morto" data-d="O lago mais salgado da terra, onde nada vive; símbolo máximo de morte — e o rio o cura.">Mar Morto</button> nunca conheceu.</p>
+      <div class="cue"><b>INTERAÇÃO</b>“Grita comigo: A ÁGUA TÁ SUBINDO! (…) Agora vira pro teu irmão e diz: ENTRA NO RIO!”</div>
+      <p class="dir">diagnóstico — aponta pra congregação</p>
+      <p class="fala">Depois de tantos anos… até onde a água subiu em <strong>VOCÊ</strong>?</p>
+      <p class="fala">Tornozelo (controle)? Joelho (você ora, mas ainda pisa)? Ou já cobriu a cabeça?</p>
+      <div class="app"><b>▶ APLICAÇÃO-CHAVE</b><strong>Não existe MAR MORTO que o rio não alcance.</strong> Mas cuidado com o pântano: bênção represada azeda. E lembra: você é curado PRA CURAR os outros.</div>
+      <details class="ctx aviso"><summary>▸ Cuidado exegético</summary><div class="txt">Leitura <b>ilustrativa</b> dos membros (ótima pra ensinar, mas não é o hebraico que carimba esses significados). No texto, o anjo mede a água a partir do <b>tornozelo</b> (47.3) — os “pés” são a porta de entrada. A cada mil côvados (~45 cm cada) a água sobe: tornozelos → joelhos → cintura → “águas de passar a nado” (47.5). E o rio do cap. 1 é o canal Quebar (Babilônia); o do cap. 47 brota do templo na visão — são rios <b>diferentes</b>. Pregue o padrão (uma vida à beira da água, enfim trazida pra dentro), não que é a mesma água.</div></details>
+    </div>
+  </section>
+
+  <!-- IV -->
+  <section class="bloco" id="b6" data-ini="33" data-fim="36">
+    <div class="cab"><h2>IV. Por que entrar? — chega de molhar só o pé</h2><span class="tempo">33–36 min</span><span class="seta">▾</span></div>
+    <div class="corpo">
+      <p class="fala">Por que Deus fez o velho profeta entrar? Duas coisas:</p>
+      <p class="fala">Você até descreve um rio parado na margem. Mas ninguém é <strong>CARREGADO</strong> por um rio… na margem.</p>
+      <p class="fala">Seco, ele sabia que o rio existia. Molhado, ele sentiu que o rio era mais forte que ele.</p>
+      <p class="fala">E a vida toda ele foi o canal que levava água pros <em>OUTROS</em>.</p>
+      <p class="fala">Agora, no fim, Deus não usa ele pra molhar ninguém. Deus põe <strong>ELE</strong> dentro da água.</p>
+      <p class="refrao">Depois de décadas derramando… Deus disse: agora entra VOCÊ.</p>
+      <p class="fala">O maior perigo de quem anda muito tempo com Deus não é cair. É se acostumar com a margem.</p>
+      <p class="fala">É conhecer o rio, pregar do rio, medir o rio… e nunca ser levado por ele.</p>
+      <p class="refrao">Chega de molhar só o pé!</p>
+    </div>
+  </section>
+
+  <!-- APELO -->
+  <section class="bloco" id="b7" data-ini="36" data-fim="40">
+    <div class="cab"><h2>Apelo — o melhor rio veio por último</h2><span class="tempo">36–40 min</span><span class="seta">▾</span></div>
+    <div class="corpo">
+      <p class="dir">fervoroso, verdade no tom</p>
+      <p class="fala">Eu vim profetizar pra alguém nessa casa:</p>
+      <p class="fala">A tua maior visão não ficou lá atrás, no dia do teu chamado. Ela tá na tua frente. E mais funda.</p>
+      <p class="fala">O rio do Ezequiel veio <strong>DEPOIS</strong> da esposa. Depois do <button class="glo" data-t="Escárnio" data-d="Zombaria, deboche, gozação. 'Depois do escárnio' = depois de tanto rirem e duvidarem dele.">escárnio</button>. Depois da queda. Aos 50, não aos 30.</p>
+      <div class="cue"><b>INTERAÇÃO</b>“Tem um veterano cansado aqui? Alguém que achou que o melhor de Deus já passou? Vem pra frente.”</div>
+      <p class="fala">E dessa vez não é pra assistir. É pra <strong>ENTRAR</strong>. Por mais fundo que você já foi… ainda <em>TEM RIO</em>.</p>
+      <p class="fala">Jesus disse: do teu interior vão correr rios de água viva. E João explicou: isso Ele falou do <strong>ESPÍRITO</strong>.</p>
+      <p class="fala">O rio tem nome. E a fonte agora é Cristo dentro de você.</p>
+      <p class="dir">baixa, fecha</p>
+      <p class="fala">O livro termina com o nome da cidade: ‘o SENHOR está ali’. Onde Ele está, a morte vira vida.</p>
+      <p class="refrao">Não te contentes com o raso. Sai da margem. ENTRA NO RIO.</p>
+      <div class="app"><b>▶ APLICAÇÃO-CHAVE</b><strong>A maior visão veio no FIM da janela, não no começo</strong> — o melhor de Deus pode estar na FRENTE, não atrás. E esse rio tem nome: é o ESPÍRITO derramado por Cristo, jorrando de DENTRO de você.</div>
+      <details class="ctx"><summary>▸ Contexto bíblico</summary><div class="txt"><b>João 7.37-39</b> — Jesus promete que do interior de quem crê “correrão rios de água viva”, e João explica que isso é o <b>Espírito Santo</b>. “<b>Yahweh Shammah</b>” (Ez 48.35) é o novo nome da cidade: “O SENHOR está ali”.</div></details>
+      <p class="dir">conduz o altar por grupos: (1) os que ficaram anos na margem; (2) os cansados que acham que o melhor passou; (3) os que carregam uma perda em silêncio</p>
+    </div>
+  </section>
+
+  <!-- ESTUDO: APÊNDICE -->
+  <details class="estudo" id="apendice">
+    <summary>Apêndice — Aprofundamentos para aplicação <span style="color:var(--nevoa);font-size:.8rem">ler antes ▾</span></summary>
+    <div class="conteudo">
+      <div class="apro"><h3>1. Um sacerdote sem templo: o que ele fazia no exílio</h3>
+        <p>Deportado em <b>597 a.C.</b>, na primeira leva, com a elite de Judá. Reassentado em <b>Tel-Abibe, às margens do canal Quebar</b> (3.15) — que nem era rio natural: era um <b>canal de irrigação</b> desviado do Eufrates, perto de Nipur. O ofício sacerdotal só funcionava <b>no templo, em Jerusalém</b>: sem templo, não há altar; sem altar, não há sacrifício; o sacerdote fica sem função. Chegou aos 30 (Nm 4.3, idade de começar) num lugar onde servir era impossível. Provavelmente trabalhava a terra e vivia entre os anciãos, que se reuniam na casa dele (8.1; 14.1; 20.1).</p>
+        <p class="para"><b>Para a aplicação:</b> Deus não esperou o templo — <b>transformou o sacerdote em profeta ali mesmo</b>. O que parecia o fim da vocação virou uma vocação maior. E fecha o arco: o sacerdote que não podia servir no altar é o mesmo que, no fim, é levado pra dentro do rio que brota do altar.</p></div>
+      <div class="apro"><h3>2. O preço do profeta</h3>
+        <p>Atos-sinais humilhantes por anos: deitar de lado 390 + 40 dias (4.4-8), comida racionada assada sobre esterco (4.9-17), raspar cabelo e barba com espada (5.1-4). Deus <b>prendeu a língua dele</b> (3.26) — mudo, fora as profecias, até Jerusalém cair (33.22). E o povo zombava: “os dias se prolongam, toda visão perece” (12.22).</p>
+        <p class="para"><b>Para a aplicação:</b> décadas de obediência que custa e <b>ninguém aplaude</b>. A maior visão veio DEPOIS de tudo isso.</p></div>
+      <div class="apro"><h3>3. O luto que Deus proibiu (cap. 24)</h3>
+        <p>Ritos públicos e sagrados (prantear, rasgar vestes, pano de saco, cinzas, tirar sandálias, cobrir o lábio, o “pão dos que choram”). Guardar luto era <b>direito e dever</b>. A esposa morre <b>no dia exato em que começa o cerco</b> (24.1) — dor privada sincronizada com a catástrofe nacional — e Deus proíbe qualquer rito.</p>
+        <p><b>De onde viria a dor:</b> Deus explica em 24.21 — assim como Ezequiel perdeu o “desejo dos seus olhos”, Israel perderia o seu: o <b>templo</b> e os <b>filhos deixados em Jerusalém</b>. Viria de <b>Babilônia</b>, por Nabucodonosor, em <b>586 a.C.</b></p>
+        <p class="para"><b>Para a aplicação:</b> ele perde a esposa e o <b>direito de chorá-la</b>. Dor sem válvula virando púlpito. <b>(Cuidado pastoral: sem romantizar o sofrimento.)</b></p></div>
+      <div class="apro"><h3>4. A glória que foi embora — e voltou</h3>
+        <p>Em 8–11 ele vê a idolatria <b>dentro do templo</b> (imagem do ciúme, anciãos no escuro, mulheres chorando por Tamuz, homens curvados ao sol). A glória (<b>kavod</b>) se retira em etapas: querubins → soleira → portão oriental → Monte das Oliveiras → parte. Em 43, <b>volta pela mesma direção</b>.</p>
+        <p class="para"><b>Para a aplicação:</b> a Presença pode deixar o que <b>tolera o pecado</b> — mas a graça a traz de volta. Tudo depende dela voltar <b>primeiro</b>.</p></div>
+      <div class="apro"><h3>5. Mar Morto e En-Gedi: a geografia da esperança</h3>
+        <p>Ponto mais baixo da terra (~430 m abaixo do nível do mar), ~10x mais salgado que o oceano, sem vida, com Sodoma e Gomorra por perto. O rio o “cura” (<b>nirpe’u</b>, raiz <b>rapha</b> — o mesmo Yahweh Rapha de Mara, Êx 15.26). <b>En-Gedi</b> é o oásis onde Davi se escondeu de Saul (1 Sm 24). Árvores dão fruto <b>todo mês</b> e folha pra remédio (<b>terufah</b>, palavra única em todo o AT). Mas v.11: charcos e pântanos ficam “pro sal” — água que <b>não corre, não cura</b>.</p>
+        <p class="para"><b>Para a aplicação:</b> não existe Mar Morto que o rio não alcance. Mas cuidado com o <b>pântano</b>: receber e reter azeda. Você é <b>curado pra curar</b>.</p></div>
+      <div class="apro"><h3>6. A vara que virou contra ele</h3>
+        <p>Nos caps. 40–42 um homem mede o templo inteiro e Ezequiel só <b>observa e anota</b>. Em 47, a <b>mesma linha de medir</b> mede ELE pra dentro do rio.</p>
+        <p class="para"><b>Para a aplicação:</b> a vida de “medir e observar” o santo de longe acaba; Deus te <b>mede pra dentro</b>.</p></div>
+      <div class="apro"><h3>7. As idades: 30 e 50</h3>
+        <p>Sacerdotes serviam <b>dos 30 aos 50</b> (Nm 4.3). Chamado aos ~30 (idade de <b>começar</b>), rio aos ~50 (idade de <b>terminar</b>). Do chamado ao rio: ~20 anos.</p>
+        <p class="para"><b>Para a aplicação:</b> a maior visão veio no <b>FIM</b> da janela. Pro veterano cansado: o melhor pode estar <b>na frente</b>.</p></div>
+      <div class="apro"><h3>8. O rio no Novo Testamento</h3>
+        <p><b>João 7.37-39</b> — “rios de água viva” = o <b>Espírito</b>. <b>Apocalipse 22.1-2</b> — o rio da vida sai do trono, árvore com fruto todo mês e folhas “para a cura das nações” (eco de Ez 47.12). <b>Yahweh Shammah</b> (48.35): “o SENHOR está ali”.</p>
+        <p class="para"><b>Para a aplicação:</b> o rio é o <b>Espírito derramado por Cristo</b>. A fonte, hoje, é Cristo em você.</p></div>
+    </div>
+  </details>
+
+  <!-- ESTUDO: P&R -->
+  <details class="estudo" id="pr">
+    <summary>Perguntas &amp; Respostas — pra dominar o texto <span style="color:var(--nevoa);font-size:.8rem">6 ▾</span></summary>
+    <div class="conteudo">
+      <div class="qa"><div class="p">1. Ele foi cativo no cap. 1 e no cap. 24 o templo ainda existia?</div>
+        <div class="r"><b>Sim.</b> O cativeiro veio em levas. Ezequiel foi na de <b>597 a.C.</b>, quando a Babilônia saqueou Jerusalém e levou a elite — <b>mas não destruiu a cidade nem o templo</b>. A destruição só veio em <b>586 a.C.</b> (noticiada no cap. 33). Por isso o sinal do cap. 24 é tão forte: o templo ainda estava DE PÉ, e a morte da esposa anunciava que ele ia cair.</div>
+        <div class="ref">☛ Ez 1.2 • 2 Rs 24–25 • Ez 33.21</div></div>
+      <div class="qa"><div class="p">2. Deus matou a esposa dele ou ela morreu do nada?</div>
+        <div class="r">Não foi acaso, mas o texto também não a apresenta como castigo. Deus <b>avisou antes</b>: “vou tirar de ti o desejo dos teus olhos com um golpe” (24.16), e ela morre no dia seguinte. O texto atribui a Deus <b>a soberania sobre o momento</b>, mas <b>não descreve a causa</b> nem culpa ela ou Ezequiel — ela é tratada com ternura. Ato <b>soberano e doloroso, com propósito de sinal</b> — pregue com reverência, sem forçar além do escrito.</div>
+        <div class="ref">☛ Ez 24.15-18</div></div>
+      <div class="qa"><div class="p">3. Qual era a principal idolatria do povo?</div>
+        <div class="r">No “tour” pelo templo (cap. 8), 4 abominações em escala crescente, mas a raiz é uma: <b>sincretismo — misturar outros deuses DENTRO da casa de Deus</b>. A imagem dos ciúmes na entrada, 70 anciãos adorando figuras no escuro, mulheres chorando pelo deus <b>Tamuz</b>, e o clímax: homens de costas pro santuário <b>adorando o sol</b>. Numa frase: a idolatria não estava lá fora — estava <b>dentro do templo</b>.</div>
+        <div class="ref">☛ Ez 8.3-18</div></div>
+      <div class="qa"><div class="p">4. Qual era o principal castigo naquele ambiente de cativeiro?</div>
+        <div class="r">Não era material — era teológico: a <b>ausência da presença de Deus</b>. O exílio significava estar longe da Casa, sem templo, sem altar, sem sacrifício. Some a perda da terra, a humilhação nacional e a vergonha de ver Jerusalém cair. Por isso a visão de abertura choca (Deus aparece <b>na Babilônia</b>!) e o clímax responde ao castigo: a <b>glória volta</b> no cap. 43. <b>(No plano material o exílio foi relativamente brando; mas a conquista e a deportação foram violentas — ver 6.)</b></div>
+        <div class="ref">☛ Ez 1.1-3 • Ez 43.1-5</div></div>
+      <div class="qa"><div class="p">5. Ezequiel viu o pai e o avô serem sacerdotes?</div>
+        <div class="r">Do <b>pai, sim</b>: “Ezequiel, filho de <b>Buzi, o sacerdote</b>” (1.3) — cresceu numa família sacerdotal, vendo o pai servir. Do <b>avô é inferência</b>: o sacerdócio era hereditário (Arão/Levi), então provavelmente sim, mas o texto não o nomeia. Detalhe: criado para o altar, viu o pai no altar, chegou aos 30… no exílio, <b>sem altar</b>.</div>
+        <div class="ref">☛ Ez 1.3 • Nm 4.3</div></div>
+      <div class="qa"><div class="p">6. Então eles não eram maltratados fisicamente?</div>
+        <div class="r">Depende da fase. No <b>dia a dia do exílio</b>, foi relativamente brando: não foram escravizados em correntes — foram reassentados em <b>comunidades</b>, com casas próprias, terra e comércio (Jr 29.5; as tábuas de <b>Al-Yahudu</b>, “a cidade de Judá”, mostram judeus fazendo negócios). Por isso o pior castigo foi teológico. <b>MAS</b> a conquista e a deportação foram <b>violentas</b>: cerco com fome extrema, marcha forçada, famílias separadas — e Zedequias viu os filhos mortos e teve os <b>olhos furados</b> (2 Rs 25.7). Resumo: não foi escravidão de chicote como no Egito, mas a conquista foi brutal e a ferida mais funda era espiritual.</div>
+        <div class="ref">☛ Jr 29.5-7 • 2 Rs 25.7 • Sl 137 • Lm 1–2</div></div>
+    </div>
+  </details>
+
+</main>
+
+<!-- GAVETA -->
+<div class="gaveta" id="gaveta">
+  <div class="painel">
+    <h4>Ir para o bloco</h4>
+    <a href="#b1"><span>Abertura</span><i>0–6</i></a>
+    <a href="#b2"><span>I. O chamado</span><i>6–12</i></a>
+    <a href="#b3"><span>II. A longa estrada</span><i>12–20</i></a>
+    <a href="#b4"><span>III. A virada</span><i>20–24</i></a>
+    <a href="#b5"><span>A escada do rio</span><i>24–33</i></a>
+    <a href="#b6"><span>IV. Por que entrar?</span><i>33–36</i></a>
+    <a href="#b7"><span>Apelo</span><i>36–40</i></a>
+    <h4 style="margin-top:16px">Estudo</h4>
+    <a href="#apendice"><span>Apêndice</span><i>8</i></a>
+    <a href="#pr"><span>Perguntas &amp; Respostas</span><i>6</i></a>
+  </div>
+</div>
+
+<!-- BARRA DE DEFINIÇÃO -->
+<div class="defbar" id="defbar" role="status" aria-live="polite">
+  <button class="fechar" id="defFechar" aria-label="Fechar definição">×</button>
+  <div class="termo" id="defTermo"></div>
+  <div class="def" id="defTexto"></div>
+</div>
+
+<script>
+(function(){
+  const $=(s)=>document.querySelector(s), $$=(s)=>[...document.querySelectorAll(s)];
+
+  /* ---- régua de água + bloco ativo ---- */
+  const blocos=$$('.bloco');
+  const nivel=$('#nivel'), topo=$('#topo'), janela=$('#janela');
+  const marcasEl=$('#marcas');
+  blocos.forEach((b,i)=>{
+    const m=document.createElement('div');
+    m.className='marca';
+    m.style.bottom=(100-(i/blocos.length)*100)+'%';
+    m.innerHTML='<span>'+(b.querySelector('.tempo').textContent.split('–')[0])+'</span>';
+    marcasEl.appendChild(m);
+  });
+
+  function progresso(){
+    const ini=blocos[0].offsetTop;
+    const fim=blocos[blocos.length-1].offsetTop+blocos[blocos.length-1].offsetHeight;
+    const y=window.scrollY+window.innerHeight*0.45;
+    let p=(y-ini)/(fim-ini);
+    p=Math.max(0,Math.min(1,p));
+    nivel.style.height=(p*100)+'%';
+    topo.style.bottom=(p*100)+'%';
+    // bloco ativo
+    let ativo=blocos[0];
+    for(const b of blocos){ if(b.offsetTop<=window.scrollY+120) ativo=b; }
+    janela.textContent=ativo.dataset.ini+'–'+ativo.dataset.fim+' min';
+    janela.classList.toggle('estourou', rodando && seg/60 > +ativo.dataset.fim);
+  }
+  window.addEventListener('scroll',progresso,{passive:true});
+  window.addEventListener('resize',progresso);
+
+  /* ---- cronômetro ---- */
+  let seg=0, rodando=false, tid=null, press=null;
+  const rel=$('#relogio');
+  function pinta(){
+    const m=String(Math.floor(seg/60)).padStart(2,'0'), s=String(seg%60).padStart(2,'0');
+    rel.textContent=m+':'+s;
+  }
+  function toca(){
+    rodando=!rodando;
+    rel.classList.toggle('rodando',rodando);
+    if(rodando){ tid=setInterval(()=>{seg++;pinta();progresso();},1000); }
+    else clearInterval(tid);
+  }
+  rel.addEventListener('click',toca);
+  rel.addEventListener('pointerdown',()=>{ press=setTimeout(()=>{ seg=0;pinta();press=null; },700); });
+  ['pointerup','pointerleave','pointercancel'].forEach(e=>rel.addEventListener(e,()=>{ if(press){clearTimeout(press);press=null;} }));
+  pinta();
+
+  /* ---- fonte ---- */
+  let tam=1.42;
+  const setTam=(v)=>{ tam=Math.max(1,Math.min(2.4,v)); document.documentElement.style.setProperty('--fala',tam+'rem'); };
+  $('#btnMais').onclick=()=>setTam(tam+.09);
+  $('#btnMenos').onclick=()=>setTam(tam-.09);
+
+  /* ---- contexto (mostrar/ocultar tudo) ---- */
+  const btnCtx=$('#btnCtx'); let ctxOn=false;
+  btnCtx.onclick=()=>{
+    ctxOn=!ctxOn;
+    btnCtx.classList.toggle('on',ctxOn);
+    btnCtx.setAttribute('aria-pressed',ctxOn);
+    $$('details.ctx').forEach(d=>d.open=ctxOn);
+  };
+
+  /* ---- colapsar bloco ---- */
+  $$('.cab').forEach(c=>{
+    c.onclick=()=>c.parentElement.classList.toggle('fechado');
+  });
+
+  /* ---- gaveta ---- */
+  const gav=$('#gaveta');
+  $('#btnGaveta').onclick=()=>gav.classList.add('aberta');
+  gav.onclick=(e)=>{ if(e.target===gav||e.target.closest('a')) gav.classList.remove('aberta'); };
+
+  /* ---- barra de definição ---- */
+  const bar=$('#defbar');
+  $$('.glo').forEach(b=>{
+    b.onclick=(e)=>{
+      e.stopPropagation();
+      $('#defTermo').textContent=b.dataset.t;
+      $('#defTexto').textContent=b.dataset.d;
+      bar.classList.add('aberta');
+    };
+  });
+  $('#defFechar').onclick=()=>bar.classList.remove('aberta');
+  document.addEventListener('click',(e)=>{ if(!e.target.closest('.glo')&&!e.target.closest('.defbar')) bar.classList.remove('aberta'); });
+
+  /* ---- tema ---- */
+  let claro=false;
+  $('#btnTema').onclick=()=>{
+    claro=!claro;
+    document.documentElement.dataset.tema=claro?'claro':'';
+    document.querySelector('meta[name=theme-color]').content=claro?'#F4F6F5':'#071A22';
+  };
+
+  /* ---- tela sempre ligada ---- */
+  let wl=null; const btnTela=$('#btnTela');
+  async function pedir(){ try{ wl=await navigator.wakeLock.request('screen'); }catch(e){} }
+  btnTela.onclick=async()=>{
+    if(!('wakeLock' in navigator)){ btnTela.textContent='Tela ✕'; return; }
+    if(wl){ await wl.release(); wl=null; btnTela.classList.remove('on'); btnTela.setAttribute('aria-pressed','false'); }
+    else { await pedir(); btnTela.classList.add('on'); btnTela.setAttribute('aria-pressed','true'); }
+  };
+  document.addEventListener('visibilitychange',()=>{ if(wl!==null&&document.visibilityState==='visible') pedir(); });
+
+  progresso();
+})();
+</script>
+</body>
+</html>
